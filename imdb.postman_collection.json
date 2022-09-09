@@ -1,0 +1,166 @@
+{
+	"info": {
+		"_postman_id": "91fbbb4d-1fb4-4ced-9c33-f90c2e6d7f7c",
+		"name": "imdb",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "movies",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "service",
+						"value": "cache",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/imdb/movies?keyword=berat",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"imdb",
+						"movies"
+					],
+					"query": [
+						{
+							"key": "keyword",
+							"value": "berat"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "movie/{id}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "service",
+						"value": "cache",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/imdb/movie/tt11816988",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"imdb",
+						"movie",
+						"tt11816988"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "movie-rates",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "rate",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "movie_id",
+							"value": "tt11816988",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/movie-rates",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"movie-rates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "movie-rates/{movie_rate}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "rate",
+							"value": "5",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/movie-rates/tt3064716",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"movie-rates",
+						"tt3064716"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
