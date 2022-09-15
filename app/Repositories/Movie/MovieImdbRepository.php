@@ -3,16 +3,15 @@
 namespace App\Repositories\Movie;
 
 use App\Contracts\MovieRepositoryInterface;
-use App\Services\GuzzleClient;
+use App\Services\Connection\Guzzle\GuzzleClient;
 
 class MovieImdbRepository implements MovieRepositoryInterface
 {
-    /** @var GuzzleClient  */
-    private $client;
+    private GuzzleClient $client;
 
-    public function __construct()
+    public function __construct(GuzzleClient $client)
     {
-        $this->client = app(GuzzleClient::class);
+        $this->client = $client;
     }
 
     public function searchMovie($keyword)

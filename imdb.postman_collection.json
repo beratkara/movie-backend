@@ -12,19 +12,13 @@
 			},
 			"request": {
 				"method": "GET",
-				"header": [
-					{
-						"key": "service",
-						"value": "cache",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "formdata",
 					"formdata": []
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/api/imdb/movies?keyword=berat",
+					"raw": "http://127.0.0.1:8000/api/imdb/collect-api/movies?keyword=berat",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -36,6 +30,7 @@
 					"path": [
 						"api",
 						"imdb",
+						"collect-api",
 						"movies"
 					],
 					"query": [
@@ -55,19 +50,13 @@
 			},
 			"request": {
 				"method": "GET",
-				"header": [
-					{
-						"key": "service",
-						"value": "cache",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "formdata",
 					"formdata": []
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/api/imdb/movie/tt11816988",
+					"raw": "http://127.0.0.1:8000/api/imdb/collect-api/movie/tt11816988",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -79,6 +68,7 @@
 					"path": [
 						"api",
 						"imdb",
+						"collect-api",
 						"movie",
 						"tt11816988"
 					]

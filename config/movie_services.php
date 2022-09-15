@@ -5,7 +5,12 @@ use App\Repositories\Movie\MovieImdbRepository;
 
 return [
     'services' => [
-        'collect_api' => MovieImdbRepository::class,
+        'collect-api' => MovieImdbRepository::class,
         'cache' => MovieCacheRepository::class
+    ],
+
+    'cache_prefix' => [
+        'search' => 'Search-',
+        'show' => 'Movie-',
     ]
 ];

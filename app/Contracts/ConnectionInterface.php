@@ -4,7 +4,7 @@ namespace App\Contracts;
 
 use App\Exceptions\ClientException;
 
-interface ThirdPartyRepositoryInterface
+interface ConnectionInterface
 {
     public function init();
     public function getHeaders(): array;

@@ -5,10 +5,8 @@ namespace App\Services\ThirdParty\CollectApi;
 use App\Events\MovieFetchedFromCache;
 use App\Exceptions\ClientException;
 use App\Models\Movie;
-use App\Services\GuzzleClient;
-use App\Services\ThirdParty\CollectApi\DTO\Collection\ImdbCollection;
+use App\Services\Connection\Guzzle\GuzzleClient;
 use App\Services\ThirdParty\CollectApi\DTO\Data\ImdbShowData;
-use App\Services\ThirdParty\CollectApi\DTO\ImdbDto;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Throwable;
@@ -40,17 +38,18 @@ class ImdbApi extends GuzzleClient
         Cache::put($name, $data, Carbon::tomorrow());
     }
 
+    /**
+     * @throws Throwable
+     */
     public function search($keyword): array
     {
-        $response = $this->isCache('Search-'.$keyword) ?? $this->get('imdbSearchByName?query='.$keyword);
-        $this->setCache('Search-'.$keyword, $response);
+        $cacheName = config('movie_services.cache_prefix.search').$keyword;
+        $response = $this->isCache($cacheName) ?? $this->get('imdbSearchByName?query='.$keyword);
+        $this->setCache($cacheName, $response);
 
         throw_unless($response->success, ClientException::class, $response->result['Error'] ?? 'Bir Hata Oluştu');
 
-        $data = new ImdbDto([
-            'data' => ImdbCollection::fromArray($response->result),
-        ]);
-        return $data->toArray();
+        return $response->result;
     }
 
     /**
@@ -58,8 +57,9 @@ class ImdbApi extends GuzzleClient
      */
     public function show($id): array
     {
-        $response = $this->isCache('Movie-'.$id) ?? $this->get('imdbSearchById?movieId='.$id);
-        $this->setCache('Movie-'.$id, $response);
+        $cacheName = config('movie_services.cache_prefix.show').$id;
+        $response = $this->isCache($cacheName) ?? $this->get('imdbSearchById?movieId='.$id);
+        $this->setCache($cacheName, $response);
 
         throw_unless($response->success, ClientException::class, $response->result['Error'] ?? 'Bir Hata Oluştu');
 
@@ -67,10 +67,7 @@ class ImdbApi extends GuzzleClient
 
         $this->checkMovie($id, $dtoData);
 
-        $data = new ImdbDto([
-            'data' => $dtoData,
-        ]);
-        return $data->toArray();
+        return $response->result;
     }
 
     private function checkMovie($id, $dtoData)

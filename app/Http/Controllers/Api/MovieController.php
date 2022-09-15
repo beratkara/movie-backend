@@ -2,33 +2,46 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Contracts\MovieServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\MovieServiceRequest;
-use App\Services\Movie\MovieService;
-use Illuminate\Http\JsonResponse;
+use App\Http\Resources\Api\MovieResource;
+use App\Services\ThirdParty\CollectApi\DTO\Collection\ImdbCollection;
+use App\Services\ThirdParty\CollectApi\DTO\Data\ImdbShowData;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class MovieController extends Controller
 {
-    /** @var MovieService */
-    private MovieService $movieService;
+    /** @var MovieServiceInterface */
+    private MovieServiceInterface $movieService;
 
-    public function __construct(MovieService $movieService)
+    public function __construct(MovieServiceInterface $movieService)
     {
         $this->movieService = $movieService;
     }
 
-    public function index(MovieServiceRequest $request): JsonResponse
+    public function index(MovieServiceRequest $request, $service): AnonymousResourceCollection
     {
         $attributes = collect($request->validated());
 
         $keyword = $attributes->get('keyword');
 
-        return response()->json($this->movieService->searchMovie($keyword));
+        $service = $this->movieService->make($service);
+        $serviceData = $service->searchMovie($keyword);
+
+        $movies = ImdbCollection::fromArray($serviceData)->toArray();
+
+        return MovieResource::collection($movies);
     }
 
-    public function show($id): JsonResponse
+    public function show($service, $id): MovieResource
     {
-        return response()->json($this->movieService->getMovieById($id));
+        $service = $this->movieService->make($service);
+        $serviceData = $service->getMovieById($id);
+
+        $movie = ImdbShowData::fromApi($serviceData)->toArray();
+
+        return MovieResource::make($movie);
     }
 
 }

@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Services\GuzzleClient;
+use App\Services\Connection\Guzzle\GuzzleClient;
 use App\Services\ThirdParty\CollectApi\ImdbApi;
 use Illuminate\Support\ServiceProvider;
 

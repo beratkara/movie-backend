@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Connection\Guzzle;
 
-use App\Contracts\ThirdPartyRepositoryInterface;
+use App\Contracts\ConnectionInterface;
 use App\Exceptions\ClientException;
 use App\Helpers\JsonHelper;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
+use Illuminate\Support\Facades\Log;
 
-class GuzzleClient implements ThirdPartyRepositoryInterface
+class GuzzleClient implements ConnectionInterface
 {
     private Client $client;
     private array $headers = [];
@@ -95,6 +97,13 @@ class GuzzleClient implements ThirdPartyRepositoryInterface
      */
     public function exception($exception)
     {
-        throw new ClientException($exception->getMessage(), $exception->getCode());
+        Log::channel('custom')->info('İstek tamamlanamadı : ' . $exception->getMessage(), $exception->getHandlerContext());
+
+        switch (get_class($exception)) {
+            case ConnectException::class:
+                throw new ClientException('Servise bağlanırken hata oluştu !', $exception->getCode());
+            default:
+                throw new ClientException($exception->getMessage(), $exception->getCode());
+        }
     }
 }

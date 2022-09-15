@@ -9,6 +9,7 @@ use App\Helpers\ResponseMessageHelper;
 use App\Models\Movie;
 use App\Models\Rate;
 use Illuminate\Support\Collection;
+use Throwable;
 
 class RateRepository implements RateRepositoryInterface
 {
@@ -20,6 +21,9 @@ class RateRepository implements RateRepositoryInterface
             ->avg('rate');
     }
 
+    /**
+     * @throws Throwable
+     */
     public function store(Collection $attributes): ResponseMessageHelper
     {
         /** @var Movie $movie */

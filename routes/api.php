@@ -18,8 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::group([], function () {
 
     Route::group(['prefix' => 'imdb'], function () {
-        Route::get('movies', [MovieController::class, 'index']);
-        Route::get('movie/{id}', [MovieController::class, 'show']);
+        Route::get('{service}/movies', [MovieController::class, 'index']);
+        Route::get('{service}/movie/{id}', [MovieController::class, 'show']);
     });
 
     Route::apiResource('movie-rates', RateController::class)->only([

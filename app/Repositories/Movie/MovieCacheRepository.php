@@ -4,9 +4,6 @@ namespace App\Repositories\Movie;
 
 use App\Contracts\MovieRepositoryInterface;
 use App\Exceptions\ClientException;
-use App\Services\ThirdParty\CollectApi\DTO\Collection\ImdbCollection;
-use App\Services\ThirdParty\CollectApi\DTO\Data\ImdbShowData;
-use App\Services\ThirdParty\CollectApi\DTO\ImdbDto;
 use Illuminate\Support\Facades\Cache;
 use Throwable;
 
@@ -17,15 +14,14 @@ class MovieCacheRepository implements MovieRepositoryInterface
      */
     public function searchMovie($keyword): array
     {
-        $response = Cache::get('Search-'.$keyword);
+        $cacheName = config('movie_services.cache_prefix.search').$keyword;
+
+        $response = Cache::get($cacheName);
 
         throw_unless($response, ClientException::class, 'Cache serivisinde böyle bir arama işlemi yok.');
         throw_unless($response->success, ClientException::class, $response->result['Error'] ?? 'Bir Hata Oluştu');
 
-        $data = new ImdbDto([
-            'data' => ImdbCollection::fromArray($response->result),
-        ]);
-        return $data->toArray();
+        return $response->result;
     }
 
     /**
@@ -33,14 +29,13 @@ class MovieCacheRepository implements MovieRepositoryInterface
      */
     public function getMovieById($movieId): array
     {
-        $response = Cache::get('Movie-'.$movieId);
+        $cacheName = config('movie_services.cache_prefix.show').$movieId;
+
+        $response = Cache::get($cacheName);
 
         throw_unless($response, ClientException::class, 'Cache serivisinde böyle bir film verisi yok.');
         throw_unless($response->success, ClientException::class, $response->result['Error'] ?? 'Bir Hata Oluştu');
 
-        $data = new ImdbDto([
-            'data' => ImdbShowData::fromApi($response->result),
-        ]);
-        return $data->toArray();
+        return $response->result;
     }
 }
